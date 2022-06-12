@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vuejs with localStorage (People App)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.min.js"></script>
+</head>
+<body class="bg-gray-200">
+  <div class="w-full max-w-lg">
+    
+    
+    <div class="border-b border-gray-300 bg-white">
+      <div class="w-full flex flex-wrap items-center justify-between p-2">
+        
+        <div>
+          <h1 class="text-2xl font-semibold text-sky-500">| People |</h1>
+        </div>
+        
+        <div>
+          <button class="rounded bg-sky-500 text-white text-lg px-3 py-1.5 font-semibold outline-none active:bg-sky-400" @click="showAddPerson = !showAddPerson">Add</button>
+        </div>
+        
+      </div>
+      
+      
+      <div class="border-t py-4" v-if="showAddPerson">
+        <div class="rounded-lg border p-3 shadow-md shadow-gray-200/50 w-5/6 mx-auto">
+          
+          <input type="text" class="w-full border rounded px-2 py-2 text-gray-500 outline-none focus:border-sky-300 mb-1.5" placeholder="Name..." v-model="newPerson.name">
+          <input type="text" class="w-full border rounded px-2 py-2 text-gray-500 outline-none focus:border-sky-300 mb-2" v-model="newPerson.occupation" placeholder="Occupation...">
+          <button class="rounded bg-sky-500 text-white text-md px-2 py-1.5 font-semibold outline-none active:bg-sky-400" @click="addPerson">Add Person</button>
+          
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="px-3 my-5">
+      
+      <div class="text-lg text-gray-500 text-center mt-10" v-if="!peopleList.length">You have no people in list...</div>
+      
+      <div
+        class="rounded-xl border border-gray-300 w-full bg-white mb-3"
+        v-for="person in peopleList" :key="person.timeId"
+      >
+        <div class="flex items-center justify-between py-2 px-3">
+          <div>
+            <h1 class="text-sky-500 text-lg font-semibold">{{ person.name }}</h1>
+            <p class="text-gray-400 text-base">{{ person.occupation }}</p>
+          </div>
+          
+          <div>
+            <button class="rounded-t-lg border border-gray-400 px-3 py-1 outline-none bg-white text-gray-500 block text-base w-full" @click="showInfo(person.timeId)">Info</button>
+            <button class="rounded-b-lg border border-gray-400 px-3 py-1 outline-none bg-gray-400 text-white block text-base w-full" @click="deletePerson(person.timeId)">Delete</button>
+          </div>
+        </div>
+        
+        <div class="border-t py-3 px-3 hidden" :id="person.timeId" trait>
+          <div class="rounded-lg border shadow-md shadow-gray-200/50 w-full mx-auto">
+            
+            <h1 class="text-sky-500 text-lg mx-2 my-1 font-semibold border-b">Personality Traits</h1>
+            
+            <p class="px-3 text-base text-gray-400/75" v-if="displayTraits(person.timeId).length">Double click to delete</p>
+            
+            <p class="px-3 text-base text-gray-400" v-if="!displayTraits(person.timeId).length">No traits yet..</p>
+
+            <div class="pt-1 px-2 mb-2 last" v-for="trait in displayTraits(person.timeId)" :key="trait" @dblclick="deleteTrait(trait.timeId)">
+              <h1 class="text-base font-semibold text-gray-500">{{ trait.trait }}</h1>
+              <p class="text-base text-gray-500">{{ trait.detail }}</p>
+            </div>
+            
+            <button class="rounded bg-sky-500 text-white text-base px-2 py-1.5 font-semibold outline-none active:bg-sky-400 m-2" @click="showTraitAdd(person.timeId)">Add New Trait</button>
+            
+            <div class="border-t p-2 hidden" :id="'a_'+person.timeId">
+              <input type="text" class="w-full border rounded px-2 py-2 text-gray-500 outline-none focus:border-sky-300 mb-1.5" placeholder="Personality trait" v-model="newTrait.trait">
+              <textarea type="text" class="w-full border rounded px-2 py-2 text-gray-500 outline-none focus:border-sky-300" v-model="newTrait.detail" rows="3" placeholder="Details..."></textarea>
+              <button class="rounded bg-sky-500 text-white text-base px-2 py-1.5 font-semibold outline-none active:bg-sky-400 mt-1" @click="addPersonalityTrait(person.timeId)">Add</button>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+
+
+
+
+  </div>
+<script src="script.js"></script>
+</body>
+</html>
